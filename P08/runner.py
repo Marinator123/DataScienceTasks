@@ -1,6 +1,6 @@
 from numpyexample.src.readexcel import read_excel
 from numpyexample.src.calculations import Calculations
-from numpyexample.src.plotfigures import Plots
+from numpyexample.src.plotfigures import Plots, show
 import matplotlib.pyplot as plt
 
 # brauche array mit allen shots on goals / goals und muss diesen dann visualisieren
@@ -48,7 +48,7 @@ def runner():
         print('regression\t','goals = ',round(w[0],2),'* shots + ',round(w[1],1))
         print()
 
-    plt.show()
+    show()
     
 
 if __name__ == '__main__':

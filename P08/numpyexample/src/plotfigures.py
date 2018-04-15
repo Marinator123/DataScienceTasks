@@ -38,3 +38,6 @@ class Plots:
         plt.title('Shots vs goals')
         plt.xlabel('number of shots')
         plt.ylabel('number of goals')
+
+def show():
+    plt.show()
