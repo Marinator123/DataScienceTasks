@@ -3,7 +3,7 @@ import seaborn as sns
 
 class Plots:
     def __init__(self, team_name):
-        self.fig = plt.figure(figsize=(20,4))
+        self.fig = plt.figure(figsize=(20,3))
         self.fig.suptitle('Stats: %s' % (team_name), fontsize=14, fontweight='bold')
         sns.set_style("darkgrid")
 
