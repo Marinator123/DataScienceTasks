@@ -5,20 +5,6 @@ class Queries:
     def __init__(self, data):
         self.data = data
 
-    """Calculates the proportion of male and female survivors of the total survivors
-    """
-    def proportion_gender_survival(self):
-        women_onboard = [d for d in self.data if d['sex'] == 'female']
-        men_onboard = [d for d in self.data if d['sex'] == 'male']
-
-        num_women_survived = np.size(list(filter(lambda x: int(x['survived']), women_onboard)))
-        num_men_survived = np.size(list(filter(lambda x: int(x['survived']), men_onboard)))
-
-        prop_women_survived = num_women_survived / len(women_onboard)
-        prop_men_survived = num_men_survived / len(men_onboard)
-
-        return {'women_prop_survived':prop_women_survived, 'men_prop_survived': prop_men_survived}
-
     def proportion_of_survival(self, data):
         num_survived = np.size(list(filter(lambda x: int(x['survived']), data)))
         return num_survived / len(data)
@@ -39,15 +25,12 @@ class Queries:
                 grouped_data[attribute_value].append(entry)
         return grouped_data
 
-    def add_attribute(self, data, column, name_attribute, groups = None):
+    def add_attribute(self, data, column, name_attribute, types):
         for entry in data:
             attribute_value = entry[column]
-            if (groups != None): # gruppieren von zahlen
-                attribute_value = float(attribute_value)
-                for i in range(0, len(groups)):
-                    if (attribute_value <= groups[i]):
-                        attribute_value = i
-                        break
+            for i in range(0, len(types)):
+                if (attribute_value == types[i]):
+                    attribute_value = i
             entry[name_attribute] = attribute_value
         return data
 
@@ -73,7 +56,8 @@ class Queries:
         return [y.max() for y in column_array]
 
     def get_column_values(self, data, column_name):
-        column_values = np.chararray(len(data))
+        column_values = []
         for i in range(0, len(data)):
-            column_values[i] = data[i][column_name]
+            if (data[i][column_name] not in column_values):
+                column_values.append(data[i][column_name])
         return column_values
