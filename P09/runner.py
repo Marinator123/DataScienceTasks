@@ -71,7 +71,7 @@ if __name__ == '__main__':
             age = float(j['age'])
         except:
             pass
-        if survival_table[index] >= 0.5 or j['sex'] == 'male' and age < 10:
+        if survival_table[index] >= 0.5:
             output_data.append([j['id'], 1])
         else: 
             output_data.append([j['id'], 0])
