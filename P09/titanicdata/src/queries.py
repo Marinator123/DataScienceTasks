@@ -70,9 +70,9 @@ class Queries:
             age_group = -1
             if (attribute_value == ''):
                 age_group = 0
-            elif (float(attribute_value) < 15):
+            elif (float(attribute_value) < 14):
                 age_group = 1
             else:
-                age_group = 0
+                age_group = 2
             entry[name_attribute] = age_group
         return data
