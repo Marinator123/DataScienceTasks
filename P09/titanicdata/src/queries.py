@@ -6,6 +6,8 @@ class Queries:
         self.data = data
 
     def proportion_of_survival(self, data):
+        if (np.size(data) == 1):
+            return int(data.item(0)['survived'])
         num_survived = np.size(list(filter(lambda x: int(x['survived']), data)))
         return num_survived / len(data)
     
@@ -61,3 +63,16 @@ class Queries:
             if (data[i][column_name] not in column_values):
                 column_values.append(data[i][column_name])
         return column_values
+
+    def add_age_group(self, data, column, name_attribute):
+        for entry in data:
+            attribute_value = entry[column]
+            age_group = -1
+            if (attribute_value == ''):
+                age_group = 0
+            elif (float(attribute_value) < 15):
+                age_group = 1
+            else:
+                age_group = 0
+            entry[name_attribute] = age_group
+        return data

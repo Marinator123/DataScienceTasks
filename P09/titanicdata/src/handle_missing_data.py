@@ -5,7 +5,9 @@ class HandleMissingData:
         self.mean_fare_per_class = self.calculate_mean_fare_per_class()
         train_data = self.fill_missing_fares(train_data)
         test_data = self.fill_missing_fares(test_data)
-        #train_data = self.fill_missing_ages
+        
+        ''' train_data = self.fill_missing_ages(train_data)
+        test_data = self.fill_missing_ages(test_data) '''
 
     def get_fixed_train_data(self):
         return self.train_data
@@ -44,4 +46,15 @@ class HandleMissingData:
                 pass
             if fare == 0:
                 entry['fare'] = self.mean_fare_per_class[entry['pclass']]
+        return data
+
+    # fill all missing ages with 100 (not used)
+    def fill_missing_ages(self, data):
+        for entry in data:
+            age = 100.0
+            try:
+                age = float(entry['age'])
+            except ValueError:
+                pass
+            entry['age'] = age
         return data
