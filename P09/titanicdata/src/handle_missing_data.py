@@ -5,7 +5,7 @@ class HandleMissingData:
         self.mean_fare_per_class = self.calculate_mean_fare_per_class()
         train_data = self.fill_missing_fares(train_data)
         test_data = self.fill_missing_fares(test_data)
-        
+        #train_data = self.fill_missing_ages
 
     def get_fixed_train_data(self):
         return self.train_data

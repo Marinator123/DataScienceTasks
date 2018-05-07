@@ -1,7 +1,7 @@
 from titanicdata.src import Queries, get_csv_data, write_csv_data, HandleMissingData
 import numpy as np
 
-def getKey(entry):
+def get_key(entry):
     return str(entry['zSex']) + str(entry['zPclass']) + str(entry['zFare_per_pclass'])
 
 if __name__ == '__main__':
@@ -15,32 +15,43 @@ if __name__ == '__main__':
 
     queries = Queries(train_data)
 
+    # Get all different enumerators of the table sex
     gender_types = queries.get_column_values(train_data, 'sex')
+    # Get all different enumerators of the table class
     pclass_types = queries.get_column_values(train_data, 'pclass')
 
+    # Add a column zSex with the related index of gender_types
     train_data = queries.add_attribute(train_data, 'sex', 'zSex', gender_types)
+    # Add a column zPClass with the related index of pclass
     train_data = queries.add_attribute(train_data, 'pclass', 'zPclass', pclass_types)
 
+    # For every pClass compute 4 different ticket ranges
     pclasses_dict = queries.group_by_attribute(train_data, 'pclass')
     fare_breaks_pclass = {i: queries.get_groups_of_attribute(y, 'fare', 4) for i, y in pclasses_dict.items()}
     
+    # Add the new range class to the train_data in the column zFare_per_pclass
     train_data = queries.add_group_attribute(train_data, 'pclass', 'fare', 'zFare_per_pclass', fare_breaks_pclass)
 
+    # Create an empty survival table
     survival_table = np.zeros((len(gender_types),len(pclass_types), 
         len(fare_breaks_pclass['1'])))
     
+    # Assign every passenger to a new dictionary ''grouped_values'', where the key represents their group
+    # --> see method get_key
     grouped_values = {}
     for entry in train_data:
-        key = getKey(entry)
+        key = get_key(entry)
         if key not in grouped_values:
             grouped_values[key] = np.array(entry)
         else:
             grouped_values[key] = np.append(grouped_values[key], entry)
     
+    # find The Proportion of Survival for every group
     for j in grouped_values.values():
         index = j[0]['zSex'], j[0]['zPclass'], j[0]['zFare_per_pclass']
         survival_table[index] = queries.proportion_of_survival(j)
 
+    # Take the group from the training data and assign them to the test
     test_data = queries.add_attribute(test_data, 'sex', 'zSex', gender_types)
     test_data = queries.add_attribute(test_data, 'pclass', 'zPclass', pclass_types)
     test_data = queries.add_group_attribute(test_data, 'pclass', 'fare', 'zFare_per_pclass', fare_breaks_pclass)
