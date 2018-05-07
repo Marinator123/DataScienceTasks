@@ -11,5 +11,6 @@ def get_csv_data(filename):
             dict_list.append(d)
     return np.array(dict_list)
 
+# Testrunner
 if __name__ == '__main__':
     get_csv_data('titanic3_train.csv')

@@ -48,13 +48,19 @@ if __name__ == '__main__':
     output_data = []
     for j in test_data:
         index = j['zSex'], j['zPclass'], j['zFare_per_pclass']
-        if survival_table[index] >= 0.5:
+        age = 100
+        try: 
+            age = float(j['age'])
+        except:
+            pass
+        if survival_table[index] >= 0.5 or j['sex'] == 'male' and age < 10:
             output_data.append([j['id'], 1])
         else: 
             output_data.append([j['id'], 0])
 
     write_csv_data('test_submission.csv', output_data) 
 
+    # age in survival table?
 # address https://openwhisk.ng.bluemix.net/api/v1/web/ZHAW%20ISPROT_ISPROT17/default/titanic.html
 
 
