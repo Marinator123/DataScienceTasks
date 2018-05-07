@@ -1,5 +1,6 @@
 from titanicdata.src import Queries, get_csv_data, write_csv_data, HandleMissingData
 import numpy as np
+import urllib, urllib.request
 
 def get_key(entry):
     return str(entry['zSex']) + str(entry['zPclass']) + str(entry['zFare_per_pclass']) + str(entry['zAge'])
@@ -75,7 +76,12 @@ if __name__ == '__main__':
         else: 
             output_data.append([j['id'], 0])
 
-    write_csv_data('test_submission.csv', output_data) 
+    write_csv_data('test_submission.csv', output_data)
+
+    file = open('test_submission.csv')
+    urlstring = 'https://openwhisk.ng.bluemix.net/api/v1/web/ZHAW%20ISPROT_ISPROT17/default/titanic.html?submission=wolfensberger_test_6&csv='
+    urlrequest = urlstring + urllib.parse.quote(file.read())
+    urllib.request.urlopen(urlrequest)
 
     # age in survival table?
 # address https://openwhisk.ng.bluemix.net/api/v1/web/ZHAW%20ISPROT_ISPROT17/default/titanic.html
