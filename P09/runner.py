@@ -64,25 +64,28 @@ if __name__ == '__main__':
     test_data = queries.add_age_group(test_data, 'age', 'zAge')
     
     output_data = []
+    bla = None
     for j in test_data:
         index = j['zSex'], j['zPclass'], j['zFare_per_pclass'], j['zAge']
-        age = 100
-        try: 
-            age = float(j['age'])
-        except:
-            pass
-        if survival_table[index] >= 0.5:
-            output_data.append([j['id'], 1])
-        else: 
+        if survival_table[index] == 0:
+            index = j['zSex'], j['zPclass'], j['zFare_per_pclass'], 2
+        bla = j
+        if survival_table[index] < 0.5:
             output_data.append([j['id'], 0])
+        else: 
+            output_data.append([j['id'], 1])
 
     write_csv_data('test_submission.csv', output_data)
 
     file = open('test_submission.csv')
     urlstring = 'https://openwhisk.ng.bluemix.net/api/v1/web/ZHAW%20ISPROT_ISPROT17/default/titanic.html?submission=wolfensberger_test_6&csv='
     urlrequest = urlstring + urllib.parse.quote(file.read())
-    urllib.request.urlopen(urlrequest)
 
+    result = urllib.request.urlopen(urlrequest)
+    result = str.split(str(result.readlines()[0]), 'wolfensberger_test_6 ')[1]
+    result = str.split(result, ' ')[1]
+    result = str.split(result, '<br>')[0]
+    print(result)
     # age in survival table?
 # address https://openwhisk.ng.bluemix.net/api/v1/web/ZHAW%20ISPROT_ISPROT17/default/titanic.html
 
